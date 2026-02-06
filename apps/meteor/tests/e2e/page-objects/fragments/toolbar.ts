@@ -19,10 +19,6 @@ export class RoomToolbar extends Toolbar {
 		return this.root.getByRole('button', { name: 'Room Information' });
 	}
 
-	private get btnTeamInfo() {
-		return this.root.getByRole('button', { name: 'Team info' });
-	}
-
 	get btnMembers() {
 		return this.root.getByRole('button', { name: 'Members' });
 	}
@@ -41,10 +37,6 @@ export class RoomToolbar extends Toolbar {
 
 	get btnDiscussion(): Locator {
 		return this.root.getByRole('button', { name: 'Discussions' });
-	}
-
-	private get btnTeamChannels(): Locator {
-		return this.root.getByRole('button', { name: 'Team Channels' });
 	}
 
 	get btnThreads(): Locator {
@@ -67,6 +59,10 @@ export class RoomToolbar extends Toolbar {
 		return this.root.getByRole('button', { name: 'Disable E2E encryption' });
 	}
 
+	get menuItemExportMessages(): Locator {
+		return this.root.getByRole('menuitem', { name: 'Export messages' });
+	}
+
 	get menuItemMentions(): Locator {
 		return this.root.getByRole('menuitem', { name: 'Mentions' });
 	}
@@ -87,10 +83,6 @@ export class RoomToolbar extends Toolbar {
 		await this.btnRoomInfo.click();
 	}
 
-	async openTeamInfo() {
-		await this.btnTeamInfo.click();
-	}
-
 	async openMembersTab() {
 		await this.btnMembers.click();
 	}
@@ -99,12 +91,52 @@ export class RoomToolbar extends Toolbar {
 		await this.btnUserInfo.click();
 	}
 
+	async openMoreOptions() {
+		await this.btnMoreOptions.click();
+	}
+
+	private get btnTeamChannels(): Locator {
+		return this.root.getByRole('button', { name: 'Team Channels' });
+	}
+
 	async openTeamChannels() {
 		await this.btnTeamChannels.click();
 	}
 
-	async openMoreOptions() {
-		await this.btnMoreOptions.click();
+	get menuItemNotificationsPreferences(): Locator {
+		return this.root.getByRole('menuitem', { name: 'Notifications Preferences' });
+	}
+
+	get menuItemDisabledE2EEncryption(): Locator {
+		return this.root.locator('role=menuitem[name="Disable E2E encryption"]');
+	}
+
+	get menuItemEnableE2EEncryption(): Locator {
+		return this.root.locator('role=menuitem[name="Enable E2E encryption"]');
+	}
+}
+
+export class TeamToolbar extends RoomToolbar {
+	private get menuItemTeamMembers(): Locator {
+		return this.root.getByRole('menuitem', { name: 'Teams Members' });
+	}
+
+	private get btnTeamInfo() {
+		return this.root.getByRole('button', { name: 'Team info' });
+	}
+
+	async openTeamMembers() {
+		await this.menuItemTeamMembers.click();
+	}
+
+	async openTeamInfo() {
+		await this.btnTeamInfo.click();
+	}
+}
+
+export class EncryptedRoomToolbar extends RoomToolbar {
+	get btnEnableE2EEncryption(): Locator {
+		return this.root.getByRole('button', { name: 'Enable E2E encryption' });
 	}
 }
 
