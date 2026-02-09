@@ -36,7 +36,18 @@ export class HomeChannel {
 
 	readonly userCard: UserCard;
 
-	readonly tabs;
+	private _tabs: {
+		members: MembersFlexTab;
+		userInfo: UserInfoFlexTab;
+		room: RoomInfoFlexTab;
+		editRoom: EditRoomFlexTab;
+		channels: ChannelsFlexTab;
+		notificationPreferences: NotificationPreferencesFlexTab;
+		exportMessages: ExportMessagesFlexTab;
+		pruneMessages: PruneMessagesFlexTab;
+		searchMessages: SearchMessagesFlexTab;
+		threads: ThreadsFlexTab;
+	};
 
 	readonly roomToolbar: RoomToolbar;
 
@@ -55,10 +66,10 @@ export class HomeChannel {
 		this.sidepanel = new Sidepanel(page);
 		this.navbar = new Navbar(page);
 		this.userCard = new UserCard(page);
-		this.tabs = {
+		this._tabs = {
 			members: new MembersFlexTab(page),
 			userInfo: new UserInfoFlexTab(page),
-			room: new RoomInfoFlexTab(page.getByRole('dialog', { name: 'Room Information' }), page),
+			room: new RoomInfoFlexTab(page.getByRole('dialog', { name: 'Channel info' }), page),
 			editRoom: new EditRoomFlexTab(page.getByRole('dialog', { name: 'Edit channel' })),
 			channels: new ChannelsFlexTab(page),
 			notificationPreferences: new NotificationPreferencesFlexTab(page),
@@ -72,6 +83,10 @@ export class HomeChannel {
 		this.toastMessage = new ToastMessages(page);
 		this.composer = new RoomComposer(page);
 		this.threadComposer = new ThreadComposer(page);
+	}
+
+	get tabs() {
+		return this._tabs;
 	}
 
 	goto() {
