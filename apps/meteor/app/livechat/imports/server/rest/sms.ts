@@ -27,7 +27,7 @@ import { createRoom } from '../../../server/lib/rooms';
 
 const logger = new Logger('SMS');
 
-const getUploadFile = async (details: Omit<IUpload, '_id'>, fileUrl: string) => {
+const getUploadFile = async (details: Omit<IUpload, '_id' | '_updatedAt'>, fileUrl: string) => {
 	const isSsrfSafe = await checkUrlForSsrf(fileUrl);
 	if (!isSsrfSafe) {
 		throw new Meteor.Error('error-invalid-url', 'Invalid URL');
