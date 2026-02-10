@@ -57,7 +57,7 @@ test.describe('E2EE File Encryption', () => {
 
 			await expect(poHomeChannel.content.lastUserMessage.locator('.rcx-icon--name-key')).toBeVisible();
 			await expect(poHomeChannel.content.getFileDescription).toHaveText('any_description');
-			await expect(poHomeChannel.content.lastMessageFileName).toContainText('any_file1.txt');
+			await expect(poHomeChannel.content.getLastMessageByFileName('any_file1.txt')).toBeVisible();
 		});
 
 		await test.step('edit the description', async () => {
@@ -92,7 +92,7 @@ test.describe('E2EE File Encryption', () => {
 
 			await expect(poHomeChannel.content.lastUserMessage.locator('.rcx-icon--name-key')).toBeVisible();
 			await expect(poHomeChannel.content.getFileDescription).toHaveText('message 1');
-			await expect(poHomeChannel.content.lastMessageFileName).toContainText('any_file1.txt');
+			await expect(poHomeChannel.content.getLastMessageByFileName('any_file1.txt')).toBeVisible();
 		});
 
 		await test.step('set whitelisted media type setting', async () => {
@@ -107,7 +107,7 @@ test.describe('E2EE File Encryption', () => {
 
 			await expect(poHomeChannel.content.lastUserMessage.locator('.rcx-icon--name-key')).toBeVisible();
 			await expect(poHomeChannel.content.getFileDescription).toHaveText('message 2');
-			await expect(poHomeChannel.content.lastMessageFileName).toContainText('any_file2.txt');
+			await expect(poHomeChannel.content.getLastMessageByFileName('any_file2.txt')).toBeVisible();
 		});
 
 		await test.step('set blacklisted media type setting to not accept application/octet-stream media type', async () => {
@@ -122,7 +122,7 @@ test.describe('E2EE File Encryption', () => {
 
 			await expect(poHomeChannel.content.lastUserMessage.locator('.rcx-icon--name-key')).toBeVisible();
 			await expect(poHomeChannel.content.getFileDescription).toHaveText('message 2');
-			await expect(poHomeChannel.content.lastMessageFileName).toContainText('any_file2.txt');
+			await expect(poHomeChannel.content.getLastMessageByFileName('any_file2.txt')).toBeVisible();
 		});
 	});
 
@@ -163,7 +163,7 @@ test.describe('E2EE File Encryption', () => {
 
 				await expect(poHomeChannel.content.lastUserMessage.locator('.rcx-icon--name-key')).not.toBeVisible();
 				await expect(poHomeChannel.content.getFileDescription).toHaveText('any_description');
-				await expect(poHomeChannel.content.lastMessageFileName).toContainText('any_file1.txt');
+				await expect(poHomeChannel.content.getLastMessageByFileName('any_file1.txt')).toBeVisible();
 			});
 		});
 	});
