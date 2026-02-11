@@ -11,6 +11,7 @@ import {
 	Subscriptions,
 	Users,
 	ReadReceipts,
+	ReadReceiptsArchive,
 	LivechatUnitMonitors,
 	ModerationReports,
 } from '@rocket.chat/models';
@@ -88,6 +89,7 @@ export async function deleteUser(userId: string, confirmRelinquish = false, dele
 
 				await Messages.removeByUserId(userId);
 				await ReadReceipts.removeByUserId(userId);
+				await ReadReceiptsArchive.removeByUserId(userId);
 
 				await ModerationReports.hideMessageReportsByUserId(
 					userId,

@@ -20,6 +20,7 @@ import {
 	Subscriptions,
 	Users,
 	ReadReceipts,
+	ReadReceiptsArchive,
 } from '@rocket.chat/models';
 
 import { normalizeTransferredByData } from './Helper';
@@ -285,6 +286,7 @@ export async function removeOmnichannelRoom(rid: string) {
 	const result = await Promise.allSettled([
 		Messages.removeByRoomId(rid),
 		ReadReceipts.removeByRoomId(rid),
+		ReadReceiptsArchive.removeByRoomId(rid),
 		Subscriptions.removeByRoomId(rid, {
 			async onTrash(doc) {
 				void notifyOnSubscriptionChanged(doc, 'removed');
