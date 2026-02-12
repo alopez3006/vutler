@@ -495,7 +495,7 @@ jobs:
     name: 🔨 Test API (CE)
     needs: [checks, build-gh-docker-publish, release-versions]
 
-    uses: ./.github/workflows/ci-test-e2e.yml
+    uses: ./.github/workflows/ci-test-e2e-vite.yml
     with:
       type: api
       release: ce
@@ -511,7 +511,7 @@ jobs:
     name: 🔨 Test UI (CE)
     needs: [checks, build-gh-docker-publish, release-versions]
 
-    uses: ./.github/workflows/ci-test-e2e.yml
+    uses: ./.github/workflows/ci-test-e2e-vite.yml
     with:
       type: ui
       release: ce
@@ -536,7 +536,7 @@ jobs:
     name: 🔨 Test API (EE)
     needs: [checks, build-gh-docker-publish, release-versions]
 
-    uses: ./.github/workflows/ci-test-e2e.yml
+    uses: ./.github/workflows/ci-test-e2e-vite.yml
     with:
       type: api
       release: ee
@@ -556,7 +556,7 @@ jobs:
     name: 🔨 Test UI (EE)
     needs: [checks, build-gh-docker-publish, release-versions]
 
-    uses: ./.github/workflows/ci-test-e2e.yml
+    uses: ./.github/workflows/ci-test-e2e-vite.yml
     with:
       type: ui
       release: ee
