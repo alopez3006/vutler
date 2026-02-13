@@ -163,7 +163,7 @@ class MediaSessionStore extends Emitter<{ change: void }> {
 			return;
 		}
 
-		this.sessionInstance.processSignal(signal);
+		void this.sessionInstance.processSignal(signal);
 	}
 }
 

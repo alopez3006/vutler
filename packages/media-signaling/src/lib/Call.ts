@@ -930,7 +930,7 @@ export class ClientMediaCall implements IClientMediaCall {
 		}
 
 		this.requireWebRTC();
-		this.negotiationManager.addNegotiation(negotiationId);
+		void this.negotiationManager.addNegotiation(negotiationId);
 	}
 
 	protected shouldIgnoreWebRTC(): boolean {
@@ -956,7 +956,7 @@ export class ClientMediaCall implements IClientMediaCall {
 
 		this.requireWebRTC();
 
-		this.negotiationManager.addNegotiation(signal.negotiationId, signal.sdp);
+		void this.negotiationManager.addNegotiation(signal.negotiationId, signal.sdp);
 	}
 
 	protected sendError(error: Partial<ClientMediaSignalError>): void {

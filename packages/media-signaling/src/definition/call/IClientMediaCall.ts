@@ -19,9 +19,9 @@ export type CallRole = 'caller' | 'callee';
 
 export type CallService = 'webrtc';
 
-export type CallFeature = 'audio' | 'screen-share';
+export const callFeatureList = ['audio', 'screen-share'] as const;
 
-export const callFeatureList: readonly CallFeature[] = ['audio', 'screen-share'];
+export type CallFeature = (typeof callFeatureList)[number];
 
 export type CallState =
 	| 'none' // trying to call with no idea if it'll reach anyone
