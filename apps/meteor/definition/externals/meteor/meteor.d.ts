@@ -120,6 +120,7 @@ declare module 'meteor/meteor' {
 			): SubscriptionHandle;
 
 			call(methodName: string, ...args: [...unknown, callback?: (error: Error | null, result: unknown) => void]): void;
+			_lastSessionId: string;
 		}
 
 		const connection: IMeteorConnection;
