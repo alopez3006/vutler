@@ -5,9 +5,13 @@ import React, { useState } from 'react';
 export interface Agent {
   id: string;
   name: string;
+  username?: string;
   type: string;
   model: string;
-  status: 'active' | 'idle' | 'error' | 'offline';
+  role?: string;
+  mbti?: string;
+  avatar?: string;
+  status: 'active' | 'idle' | 'error' | 'offline' | 'online';
   lastActive?: string;
 }
 
@@ -140,10 +144,20 @@ export default function AgentsTable({ agents, onAgentClick }: AgentsTableProps) 
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#a855f7] flex items-center justify-center text-white font-semibold text-sm" aria-hidden="true">
+                    <img
+                      src={agent.avatar || `/sprites/agent-${agent.username || agent.name.toLowerCase()}.png`}
+                      alt={agent.name}
+                      className="w-10 h-10 rounded-lg bg-[#14151f]"
+                      style={{ imageRendering: 'pixelated' }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling!.classList.remove('hidden'); }}
+                    />
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#a855f7] flex items-center justify-center text-white font-semibold text-sm hidden" aria-hidden="true">
                       {agent.name.substring(0, 2).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium text-white">{agent.name}</span>
+                    <div className="min-w-0">
+                      <span className="text-sm font-medium text-white">{agent.name}</span>
+                      {agent.role && <p className="text-xs text-[#6b7280] truncate">{agent.role}</p>}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -191,9 +205,12 @@ export default function AgentsTable({ agents, onAgentClick }: AgentsTableProps) 
             aria-label={`View ${agent.name} details`}
           >
             <div className="flex items-start space-x-3">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#3b82f6] to-[#a855f7] flex items-center justify-center text-white font-semibold flex-shrink-0" aria-hidden="true">
-                {agent.name.substring(0, 2).toUpperCase()}
-              </div>
+              <img
+                src={agent.avatar || `/sprites/agent-${agent.username || agent.name.toLowerCase()}.png`}
+                alt={agent.name}
+                className="w-12 h-12 rounded-lg bg-[#14151f] flex-shrink-0"
+                style={{ imageRendering: 'pixelated' }}
+              />
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-sm font-medium text-white truncate">{agent.name}</h3>

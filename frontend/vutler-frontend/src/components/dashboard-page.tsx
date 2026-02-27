@@ -80,8 +80,7 @@ export default function DashboardPage() {
   };
 
   const handleAgentClick = (agent: Agent) => {
-    console.log('Agent clicked:', agent);
-    // Navigate to agent details page
+    window.location.href = `/agents/${agent.username || agent.id}`;
   };
 
   const handleStatClick = (label: string) => {
