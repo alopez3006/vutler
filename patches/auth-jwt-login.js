@@ -4,7 +4,12 @@ const router = express.Router();
 const pool = require('../lib/vaultbrix');
 const SCHEMA = 'tenant_vutler';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vutler-jwt-secret-2026';
+// WARNING: Use JWT_SECRET env var in production!
+const DEFAULT_SECRET = 'vutler-jwt-secret-2026';
+const JWT_SECRET = process.env.JWT_SECRET || DEFAULT_SECRET;
+if (!process.env.JWT_SECRET) {
+  console.warn('[AUTH-JWT-LOGIN] Using default JWT_SECRET - set JWT_SECRET env var in production!');
+}
 
 function signJwt(payload) {
   const header = Buffer.from(JSON.stringify({alg:'HS256',typ:'JWT'})).toString('base64url');

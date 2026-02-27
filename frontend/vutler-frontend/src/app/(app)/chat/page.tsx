@@ -163,6 +163,8 @@ export default function ChatProPage() {
   const [text, setText] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
+  const [loadingChannels, setLoadingChannels] = useState(true);
+  const [channelsError, setChannelsError] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const currentUser = typeof window !== "undefined" ? getCurrentUser() : null;
@@ -176,10 +178,16 @@ export default function ChatProPage() {
 
   // Fetch channels
   const fetchChannels = useCallback(async () => {
+    setLoadingChannels(true);
+    setChannelsError("");
     try {
       const data = await api("/api/v1/chat/channels");
       setChannels(data.channels || data || []);
-    } catch { /* */ }
+    } catch (err: any) {
+      setChannelsError(err.message || "Failed to load channels");
+    } finally {
+      setLoadingChannels(false);
+    }
   }, []);
 
   useEffect(() => { if (authChecked) fetchChannels(); }, [authChecked, fetchChannels]);
@@ -304,7 +312,13 @@ export default function ChatProPage() {
             </button>
           ))}
 
-          {channels.length === 0 && (
+          {loadingChannels && (
+            <div className="px-4 py-8 text-center text-slate-600 text-xs">Loading channels...</div>
+          )}
+          {channelsError && (
+            <div className="px-4 py-2 text-center text-red-400 text-xs">{channelsError}</div>
+          )}
+          {!loadingChannels && !channelsError && channels.length === 0 && (
             <div className="px-4 py-8 text-center text-slate-600 text-xs">No channels yet</div>
           )}
         </div>
