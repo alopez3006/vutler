@@ -124,6 +124,13 @@ export default function DashboardPage() {
           <p className="text-sm text-[#9ca3af]">Monitor your agents and system performance</p>
         </div>
         <div className="flex items-center space-x-2">
+          <button
+            onClick={() => window.location.href = '/demo'}
+            className="px-4 py-2 border border-[#3b82f6] text-[#3b82f6] hover:bg-[#3b82f6] hover:text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 focus:ring-offset-[#08090f] flex items-center space-x-2"
+          >
+            <span>🎬</span>
+            <span>Demo Mode</span>
+          </button>
           <TopbarIconButton
             onClick={handleRefresh}
             label="Refresh dashboard"
