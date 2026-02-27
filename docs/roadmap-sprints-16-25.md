@@ -567,6 +567,7 @@ Août 2026
 - **Voice Interface** — Commandes vocales
 - **White-label** — MSP branding
 - **Marketplace Plugins** — Communauté de développeurs
+- **Agent Benchmarks & Evals** — Évaluation de performance des agents (temps de réponse, qualité, coût/token, taux de succès), scoring automatique, comparaison entre modèles — inspiré de l'approche "evaluator-first" (cf. brainqub3/agent-labs)
 - **AI Models Fine-tuning** — Models custom par workspace
 - **Enterprise SSO** — SAML, LDAP
 - **Multi-language** — FR, DE, EN, IT
