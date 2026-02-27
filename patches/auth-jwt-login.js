@@ -4,7 +4,11 @@ const router = express.Router();
 const pool = require('../lib/vaultbrix');
 const SCHEMA = 'tenant_vutler';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vutler-jwt-secret-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error('[AUTH-JWT-LOGIN] JWT_SECRET environment variable is required!');
+  throw new Error('JWT_SECRET not configured');
+}
 
 function signJwt(payload) {
   const header = Buffer.from(JSON.stringify({alg:'HS256',typ:'JWT'})).toString('base64url');
