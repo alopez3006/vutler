@@ -196,7 +196,7 @@ export default function Sidebar({ user = { name: 'User', email: 'user@vutler.com
           {!collapsed && (
             <div className="flex items-center space-x-3">
               <img 
-                src="/landing/vutler-logo-full-white.svg" 
+                src="/landing/vutler-logo-full-white.png" 
                 alt="Vutler" 
                 className="h-7"
                 onError={(e) => {

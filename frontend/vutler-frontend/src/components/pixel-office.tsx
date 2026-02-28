@@ -142,20 +142,20 @@ function AgentSprite({ agent, x, y, isSelected, onClick, bubble, bobOffset }: {
       )}
 
       {/* Status ring */}
-      <div className="absolute -inset-1 rounded-full opacity-50"
-        style={{ boxShadow: `0 0 6px ${stateColor[agent.state]}`, border: `1.5px solid ${stateColor[agent.state]}` }} />
+      <div className="absolute -inset-1 rounded-lg opacity-50"
+        style={{ boxShadow: `0 0 8px ${stateColor[agent.state]}`, border: `1.5px solid ${stateColor[agent.state]}` }} />
 
       {/* Sprite image */}
       <img
         src={`/sprites/agent-${agent.id}.png`}
         alt={agent.name}
-        className={`w-7 h-7 ${isSelected ? 'ring-2 ring-white/80 rounded-full' : ''}`}
+        className={`w-10 h-10 ${isSelected ? 'ring-2 ring-white/80 rounded-lg' : ''}`}
         style={{ imageRendering: 'pixelated' }}
         draggable={false}
       />
 
       {/* Status dot */}
-      <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-black"
+      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-black"
         style={{ backgroundColor: stateColor[agent.state] }} />
 
       {/* Name tag */}
