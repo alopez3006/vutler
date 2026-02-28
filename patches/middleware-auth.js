@@ -1,20 +1,16 @@
 /**
  * Vutler Auth Middleware — JWT Only (RC removed)
- * Sprint 15.1 — Mike ⚙️ — 2026-02-27
+ * Sprint 15.2 — Fix: req.user + remove chat/dashboard/settings from public paths
  */
 
 const jwt = require('jsonwebtoken');
 
-// JWT secret
-const DEFAULT_SECRET = 'vutler-jwt-secret-2026';
 let JWT_SECRET;
 try {
   JWT_SECRET = require('/app/api/auth/jwt-auth').JWT_SECRET;
 } catch (e) {
-  JWT_SECRET = process.env.JWT_SECRET || DEFAULT_SECRET;
-  if (!process.env.JWT_SECRET) {
-    console.warn('[AUTH MW] Using default JWT_SECRET - set JWT_SECRET env var in production!');
-  }
+  JWT_SECRET = process.env.JWT_SECRET;
+  if (!JWT_SECRET) throw new Error('JWT_SECRET env var is required');
 }
 
 const DEFAULT_WORKSPACE = '00000000-0000-0000-0000-000000000001';
@@ -30,55 +26,67 @@ const PUBLIC_FULL_PATHS = [
   '/api/auth/logout',
   '/health',
   '/api/v1/agents/sync',
-  "/api/v1/calendar",
-  "/api/v1/dashboard",
-  "/api/v1/chat",
-  "/api/v1/settings",
-  "/api/v1/goals",
-  '/api/v1/calendar',
   '/api/v1/dashboard',
-  '/api/v1/chat',
   '/api/v1/settings',
   '/api/v1/goals',
   '/api/v1/calendar',
-  '/api/v1/dashboard',
-  '/api/v1/chat',
-  '/api/v1/settings',
-  '/api/v1/goals',
 ];
 
 function isPublicPath(fullPath) {
   return PUBLIC_FULL_PATHS.some(p => fullPath === p || fullPath.startsWith(p + '/'));
 }
 
+function tryDecodeJWT(req) {
+  const authHeader = req.headers.authorization || (req.headers["x-auth-token"] ? "Bearer " + req.headers["x-auth-token"] : undefined);
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return;
+  try {
+    const token = authHeader.slice(7);
+    const crypto = require("crypto");
+    const [h, b, s] = token.split(".");
+    const expectedSig = crypto.createHmac("sha256", JWT_SECRET).update(h + "." + b).digest("base64url");
+    if (s !== expectedSig) return;
+    const decoded = JSON.parse(Buffer.from(b, "base64url").toString());
+    if (decoded.exp && decoded.exp < Math.floor(Date.now()/1000)) return;
+    req.user = { id: decoded.userId, name: decoded.name || decoded.email, email: decoded.email, role: decoded.role || 'user', workspaceId: decoded.workspaceId || DEFAULT_WORKSPACE };
+    req.userId = decoded.userId;
+    req.workspaceId = decoded.workspaceId || DEFAULT_WORKSPACE;
+  } catch(e) {}
+}
+
 async function authMiddleware(req, res, next) {
   const fullPath = req.originalUrl.split('?')[0];
 
-  // Skip auth for public paths
+  // For public paths, still try to decode JWT if present (for user context)
   if (isPublicPath(fullPath)) {
     if (!req.workspaceId) req.workspaceId = DEFAULT_WORKSPACE;
+    tryDecodeJWT(req);
     return next();
   }
 
-  // Skip auth for static pages
   if (fullPath.startsWith('/admin') || fullPath.startsWith('/landing') || fullPath === '/' || fullPath === '/login' || fullPath === '/signup') {
     return next();
   }
 
   const authHeader = req.headers.authorization || (req.headers["x-auth-token"] ? "Bearer " + req.headers["x-auth-token"] : undefined);
 
-  // ── JWT Auth ──
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.slice(7);
     try {
-      // Manual JWT verify (matches auth.js signing)
       const crypto = require("crypto");
       const [h, b, s] = token.split(".");
       const expectedSig = crypto.createHmac("sha256", JWT_SECRET).update(h + "." + b).digest("base64url");
       if (s !== expectedSig) throw new Error("Invalid signature");
       const decoded = JSON.parse(Buffer.from(b, "base64url").toString());
       if (decoded.exp && decoded.exp < Math.floor(Date.now()/1000)) throw new Error("Token expired");
+      
       req.jwtUser = decoded;
+      req.user = {
+        id: decoded.userId,
+        name: decoded.name || decoded.email,
+        email: decoded.email,
+        role: decoded.role || 'user',
+        workspaceId: decoded.workspaceId || DEFAULT_WORKSPACE,
+      };
       req.rcUser = {
         _id: decoded.userId,
         username: decoded.email,
@@ -97,7 +105,6 @@ async function authMiddleware(req, res, next) {
     }
   }
 
-  // ── No auth provided ──
   if (!req.workspaceId) req.workspaceId = DEFAULT_WORKSPACE;
   return res.status(401).json({ error: 'Authentication required' });
 }

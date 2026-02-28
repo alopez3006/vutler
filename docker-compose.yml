@@ -12,6 +12,9 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - REDIS_URL=redis://redis:6379
+      # JWT Secret (required)
+      - JWT_SECRET=${JWT_SECRET}
+      - VAULTBRIX_PASSWORD=${VAULTBRIX_PASSWORD}
       # PostgreSQL connection (Vaultbrix)
       - DATABASE_URL=${DATABASE_URL}
       # LLM Provider API Keys
